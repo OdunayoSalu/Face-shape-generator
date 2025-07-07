@@ -44,15 +44,16 @@
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
-    function drawBlob(x, y, radius, points = 20, noiseScale = 0.4) {
+    function drawBlob(x, y, radiusX, radiusY, points = 20, noiseScale = 0.4) {
       const step = (Math.PI * 2) / points;
       ctx.beginPath();
       for (let i = 0; i <= points; i++) {
         const angle = i * step;
         const noise = 1 + (Math.random() - 0.5) * noiseScale;
-        const r = radius * noise;
-        const px = x + Math.cos(angle) * r;
-        const py = y + Math.sin(angle) * r;
+        const rX = radiusX * noise;
+        const rY = radiusY * noise;
+        const px = x + Math.cos(angle) * rX;
+        const py = y + Math.sin(angle) * rY;
         if (i === 0) ctx.moveTo(px, py);
         else ctx.lineTo(px, py);
       }
@@ -66,8 +67,9 @@
       for (let i = 0; i < 4; i++) {
         const x = 180 + (i % 2) * 300;
         const y = 180 + Math.floor(i / 2) * 250;
-        const radius = 80 + Math.random() * 30;
-        drawBlob(x, y, radius);
+        const radiusX = 60 + Math.random() * 60; // width
+        const radiusY = 60 + Math.random() * 60; // height
+        drawBlob(x, y, radiusX, radiusY);
       }
     }
 
