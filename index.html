@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Face Shape Generator</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: sans-serif;
+      background: #fdf5cc;
+      height: 100vh;
+      margin: 0;
+      padding: 1rem;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      margin-top: 1rem;
+      background: #fff6d5;
+    }
+    .controls {
+      margin-top: 1rem;
+    }
+    button {
+      margin: 0 0.5rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Organic Face Shape Generator</h1>
+  <canvas id="canvas" width="800" height="600"></canvas>
+  <div class="controls">
+    <button onclick="drawShapes()">Refresh</button>
+    <button onclick="copyCanvas()">Copy Image</button>
+    <button onclick="downloadCanvas()">Download as PNG</button>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    function drawBlob(x, y, radius, points = 20, noiseScale = 0.4) {
+      const step = (Math.PI * 2) / points;
+      ctx.beginPath();
+      for (let i = 0; i <= points; i++) {
+        const angle = i * step;
+        const noise = 1 + (Math.random() - 0.5) * noiseScale;
+        const r = radius * noise;
+        const px = x + Math.cos(angle) * r;
+        const py = y + Math.sin(angle) * r;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.fillStyle = '#f4a328';
+      ctx.fill();
+    }
+
+    function drawShapes() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < 4; i++) {
+        const x = 180 + (i % 2) * 300;
+        const y = 180 + Math.floor(i / 2) * 250;
+        const radius = 80 + Math.random() * 30;
+        drawBlob(x, y, radius);
+      }
+    }
+
+    function copyCanvas() {
+      canvas.toBlob(blob => {
+        const item = new ClipboardItem({ 'image/png': blob });
+        navigator.clipboard.write([item]);
+      });
+    }
+
+    function downloadCanvas() {
+      const link = document.createElement('a');
+      link.download = 'face_shapes.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+
+    drawShapes();
+  </script>
+</body>
+</html>
