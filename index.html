@@ -33,7 +33,7 @@
 </head>
 <body>
   <h1>Organic Face Shape Generator</h1>
-  <canvas id="canvas" width="800" height="600"></canvas>
+  <canvas id="canvas" width="800" height="600" draggable="true"></canvas>
   <div class="controls">
     <button onclick="drawShapes()">Refresh</button>
     <button onclick="copyCanvas()">Copy Image</button>
@@ -86,6 +86,15 @@
       link.href = canvas.toDataURL();
       link.click();
     }
+
+    canvas.addEventListener('dragstart', (e) => {
+      canvas.toBlob(blob => {
+        const file = new File([blob], 'face_shapes.png', { type: 'image/png' });
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        e.dataTransfer.items.add(file);
+      });
+    });
 
     drawShapes();
   </script>
