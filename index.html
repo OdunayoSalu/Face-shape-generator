@@ -16,6 +16,7 @@
       padding: 1rem;
     }
     canvas {
+      display: none; /* Hide the canvas */
       border: 1px solid #ccc;
       margin-top: 1rem;
       background: #fff6d5;
@@ -30,9 +31,7 @@
       cursor: pointer;
     }
     #preview {
-      margin-top: 1rem;
-      max-width: 100%;
-      border: 1px dashed #aaa;
+      /* Moved styles inline with the element */
     }
   </style>
 </head>
@@ -44,7 +43,7 @@
     <button onclick="copyCanvas()">Copy Image</button>
     <button onclick="downloadCanvas()">Download as PNG</button>
   </div>
-  <img id="preview" alt="Draggable Image Preview" draggable="true" />
+  <img id="preview" alt="Draggable Image Preview" draggable="true" style="margin-top: 1rem; max-width: 100%; border: 1px dashed #aaa;" />
 
   <script>
     const canvas = document.getElementById('canvas');
