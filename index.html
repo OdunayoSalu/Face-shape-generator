@@ -29,20 +29,27 @@
       font-size: 1rem;
       cursor: pointer;
     }
+    #preview {
+      margin-top: 1rem;
+      max-width: 100%;
+      border: 1px dashed #aaa;
+    }
   </style>
 </head>
 <body>
   <h1>Organic Face Shape Generator</h1>
-  <canvas id="canvas" width="800" height="600" draggable="true"></canvas>
+  <canvas id="canvas" width="800" height="600"></canvas>
   <div class="controls">
     <button onclick="drawShapes()">Refresh</button>
     <button onclick="copyCanvas()">Copy Image</button>
     <button onclick="downloadCanvas()">Download as PNG</button>
   </div>
+  <img id="preview" alt="Draggable Image Preview" draggable="true" />
 
   <script>
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
+    const preview = document.getElementById('preview');
 
     function drawBlob(x, y, radiusX, radiusY, points = 20, noiseScale = 0.4) {
       const step = (Math.PI * 2) / points;
@@ -71,6 +78,7 @@
         const radiusY = 60 + Math.random() * 60; // height
         drawBlob(x, y, radiusX, radiusY);
       }
+      updatePreviewImage();
     }
 
     function copyCanvas() {
@@ -87,14 +95,9 @@
       link.click();
     }
 
-    canvas.addEventListener('dragstart', (e) => {
-      canvas.toBlob(blob => {
-        const file = new File([blob], 'face_shapes.png', { type: 'image/png' });
-        const dt = new DataTransfer();
-        dt.items.add(file);
-        e.dataTransfer.items.add(file);
-      });
-    });
+    function updatePreviewImage() {
+      preview.src = canvas.toDataURL("image/png");
+    }
 
     drawShapes();
   </script>
